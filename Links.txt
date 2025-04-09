@@ -1,4 +1,0 @@
-1. https://github.com/jsalbert/Music-Genre-Classification-with-Deep-Learning
-2. https://github.com/MelihGulum/Music-Genre-Classification
-3. https://github.com/crlandsc/Music-Genre-Classification-Using-Convolutional-Neural-Networks
-4. https://github.com/carlosgorlongaiatto/NNDL_Project
