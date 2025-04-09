@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ViboSonic - Music Genre Classifier</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>  
+<body class="bg-gray-100 p-6">
+    <div class="max-w-xl mx-auto bg-white p-8 rounded-2xl shadow-lg text-center">
+      <h1 class="text-4xl font-bold mb-8 gradient-text">ViboSonic</h1>
+  
+      <form id="uploadForm" class="flex flex-col items-center space-y-6">
+        <label for="audioFile" class="file-label">
+          <span class="file-label-text">Choose an audio file</span>
+          <input type="file" id="audioFile" name="file" accept="audio/*" required class="file-input hidden">
+        </label>
+        <div id="selectedFile" class="selected-file hidden"></div>
+        <button type="submit" class="upload-btn">Predict Genre</button>
+      </form>
+      
+  
+      <div id="status" class="text-blue-700 mt-4 hidden">Processing... Please wait.</div>
+      <div id="error" class="text-red-600 mt-2 hidden"></div>
+  
+      <p id="fileInfo" class="mt-6 text-lg font-medium text-gray-800 hidden">This file predicts to:</p>
+
+      <canvas id="genreChart" class="mt-8 hidden"></canvas>
+    </div>
+  
+    <script>
+      const form = document.getElementById('uploadForm');
+      const statusDiv = document.getElementById('status');
+      const errorDiv = document.getElementById('error');
+      const genreChart = document.getElementById('genreChart');
+      let chartInstance = null;
+  
+
+      document.getElementById("audioFile").addEventListener("change", function () {
+        const file = this.files[0];
+        const fileInfo = document.getElementById("fileInfo");
+        const selectedFile = document.getElementById("selectedFile");
+
+        if (file) {
+            selectedFile.textContent = `🎵 ${file.name}`;
+            selectedFile.classList.remove("hidden");
+            fileInfo.classList.remove("hidden");
+        } else {
+            selectedFile.classList.add("hidden");
+            fileInfo.classList.add("hidden");
+        }
+});
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        statusDiv.classList.remove('hidden');
+        errorDiv.classList.add('hidden');
+        genreChart.classList.add('hidden');
+  
+        const formData = new FormData();
+        formData.append("file", document.getElementById("audioFile").files[0]);
+  
+        try {
+          const response = await fetch('/predict', {
+            method: 'POST',
+            body: formData
+          });
+  
+          const data = await response.json();
+          statusDiv.classList.add('hidden');
+  
+          if (data.error) {
+            errorDiv.textContent = data.error;
+            errorDiv.classList.remove('hidden');
+          } else {
+            const labels = Object.keys(data);
+            const values = Object.values(data);
+  
+            // Destroy existing chart if any
+            if (chartInstance) {
+              chartInstance.destroy();
+            }
+  
+            chartInstance = new Chart(genreChart, {
+              type: 'pie',
+              data: {
+                labels: labels,
+                datasets: [{
+                  label: "Genre Probability",
+                  data: values,
+                  backgroundColor: [
+                    '#6366f1', '#3b82f6', '#06b6d4', '#10b981',
+                    '#84cc16', '#f59e0b', '#ef4444', '#8b5cf6',
+                    '#ec4899', '#0ea5e9'
+                  ],
+                  borderColor: '#fff',
+                  borderWidth: 2,
+                }]
+              },
+              options: {
+                responsive: true,
+                plugins: {
+                  tooltip: {
+                    callbacks: {
+                      label: function (context) {
+                        return `${context.label}: ${context.raw.toFixed(2)}%`;
+                      }
+                    }
+                  },
+                  legend: {
+                    position: 'bottom'
+                  }
+                },
+                animation: {
+                  animateRotate: true,
+                  animateScale: true
+                }
+              }
+            });
+  
+            genreChart.classList.remove('hidden');
+          }
+        } catch (err) {
+          statusDiv.classList.add('hidden');
+          errorDiv.textContent = "An error occurred. Please try again.";
+          errorDiv.classList.remove('hidden');
+        }
+      });
+    </script>
+  </body>
+  

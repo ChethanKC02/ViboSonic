@@ -1,0 +1,89 @@
+/* Animated background */
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #dbeafe, #fef9f8, #f0f4f8);
+    background-size: 400% 400%;
+    animation: gradientFlow 15s ease infinite;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Glass card */
+.max-w-xl {
+    backdrop-filter: blur(15px);
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Gradient title */
+.gradient-text {
+    background: linear-gradient(to right, #4f46e5, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* File input custom */
+.file-label {
+    display: inline-block;
+    width: 100%;
+    max-width: 90%;
+    padding: 1.5rem;
+    border: 2px dashed #60a5fa;
+    border-radius: 1rem;
+    background-color: #f9fafb;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.file-label:hover {
+    background-color: #e0f2fe;
+    border-color: #3b82f6;
+}
+
+.file-label-text {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #2563eb;
+}
+
+.upload-btn {
+    background: linear-gradient(to right, #4f46e5, #3b82f6);
+    color: white;
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    border-radius: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.upload-btn:hover {
+    background: linear-gradient(to right, #3b82f6, #1e40af);
+    transform: scale(1.05);
+}
+
+#status {
+    animation: pulse 1s infinite;
+    color: #1e40af;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.selected-file {
+    margin-top: 0.5rem;
+    color: #1e3a8a;
+    font-weight: 500;
+}
