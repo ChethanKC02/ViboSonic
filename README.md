@@ -24,7 +24,7 @@ Make sure you have Python 3.x and **pip** installed. You'll also need `git` for 
    git clone https://github.com/ChethanKC02/ViboSonic.git
    cd vibosonic
 
-2. **Create a Virtual Environment **(recommended):
+2. **Create a Virtual Environment** (recommended):
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows use: venv\Scripts\activate
