@@ -21,7 +21,7 @@ Make sure you have Python 3.x and **pip** installed. You'll also need `git` for 
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-username/vibosonic.git
+   git clone https://github.com/ChethanKC02/ViboSonic.git
    cd vibosonic
 
 2. **Create a Virtual Environment **(recommended):
