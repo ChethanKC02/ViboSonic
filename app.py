@@ -1,3 +1,4 @@
+
 from flask import Flask, request, render_template, jsonify
 import os
 from werkzeug.utils import secure_filename
@@ -16,7 +17,7 @@ def index():
 def predict():
     if "file" not in request.files:
         return jsonify({"error": "No file part in request."}), 400
-    
+
     file = request.files["file"]
     if file.filename == "":
         return jsonify({"error": "No selected file."}), 400
@@ -25,11 +26,8 @@ def predict():
         filename = secure_filename(file.filename)
         file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
         file.save(file_path)
-    
-        # After prediction
-        genre_probs = predict_genre(file_path)
 
-        # Ensure float and round to 2 decimals
+        genre_probs = predict_genre(file_path)
         genre_probs = {k: round(float(v), 2) for k, v in genre_probs.items()}
 
         return jsonify(genre_probs)
