@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ViboSonic - Genre Prediction</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -12,24 +11,34 @@
 </head>
 
 <body class="bg-gradient-to-tr from-gray-900 via-black to-gray-900 text-white min-h-screen flex items-center justify-center">
-  <div class="w-full max-w-2xl p-8 bg-black bg-opacity-50 backdrop-blur-2xl rounded-3xl shadow-2xl">
-    <h1 class="text-5xl font-orbitron text-center mb-10 text-indigo-400 tracking-wider">ViboSonic</h1>
+  <div class="main-glass-box w-full max-w-2xl p-8 glassmorphism-effect rounded-3xl shadow-2xl">
+    <!-- <h1 class="text-5xl font-orbitron text-center mb-10 text-indigo-400 tracking-wider">ViboSonic</h1> -->
+    <p class="text-center text-lg font-semibold text-indigo-300 italic mb-6 quote-style">
+       | Feel the music. Classify the magic. |
+    </p>
+    
 
     <form id="uploadForm" class="flex flex-col items-center space-y-6">
       <label for="audioFile" class="file-label">
-        <span class="file-label-text">🎵 Upload an audio file</span>
+        <span class="file-label-text"> Upload an audio file </span>
         <input type="file" id="audioFile" name="file" accept="audio/*" required class="file-input hidden" />
       </label>
 
       <div id="selectedFile" class="selected-file hidden"></div>
-      <button type="submit" class="upload-btn">🔎 Predict Genre</button>
+      <button type="submit" class="upload-btn">Predict Genre</button>
+
+      <!-- <button type="submit" class="upload-btn">🔎 Predict Genre</button> -->
     </form>
 
     <div id="status" class="text-indigo-300 mt-6 hidden text-center">Analyzing audio... 🎶</div>
     <div id="error" class="text-red-400 mt-2 hidden text-center"></div>
 
-    <p id="fileInfo" class="mt-6 text-lg font-medium text-center hidden">Genre Prediction Results:</p>
-    <canvas id="genreChart" class="mt-8 hidden"></canvas>
+    <!-- Result Box with Glass Effect -->
+    <div id="resultBox" class="mt-10 p-6 rounded-xl glassmorphism-effect hidden">
+      <p class="text-xl font-semibold text-center mb-4">Genre Prediction Results</p>
+      <canvas id="genreChart" class="mb-6"></canvas>
+      <div id="genreLabels" class="flex flex-wrap justify-center gap-3"></div>
+    </div>
   </div>
 
   <script>
@@ -37,28 +46,26 @@
     const statusDiv = document.getElementById("status");
     const errorDiv = document.getElementById("error");
     const genreChart = document.getElementById("genreChart");
+    const genreLabelsDiv = document.getElementById("genreLabels");
+    const resultBox = document.getElementById("resultBox");
+    const selectedFile = document.getElementById("selectedFile");
     let chartInstance = null;
 
     document.getElementById("audioFile").addEventListener("change", function () {
       const file = this.files[0];
-      const fileInfo = document.getElementById("fileInfo");
-      const selectedFile = document.getElementById("selectedFile");
-
       if (file) {
-        selectedFile.textContent = `🎵 ${file.name}`;
+        selectedFile.textContent = ` 🎵 Selected File : ${file.name} 🎵`;
         selectedFile.classList.remove("hidden");
-        fileInfo.classList.remove("hidden");
       } else {
         selectedFile.classList.add("hidden");
-        fileInfo.classList.add("hidden");
       }
     });
-
+    
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       statusDiv.classList.remove("hidden");
       errorDiv.classList.add("hidden");
-      genreChart.classList.add("hidden");
+      resultBox.classList.add("hidden");
 
       const formData = new FormData();
       formData.append("file", document.getElementById("audioFile").files[0]);
@@ -78,51 +85,48 @@
         } else {
           const labels = Object.keys(data);
           const values = Object.values(data);
+          const colors = [
+            "#6366f1", "#3b82f6", "#06b6d4", "#10b981",
+            "#84cc16", "#f59e0b", "#ef4444", "#8b5cf6",
+            "#ec4899", "#0ea5e9"
+          ];
 
-          if (chartInstance) {
-            chartInstance.destroy();
-          }
+          if (chartInstance) chartInstance.destroy();
 
           chartInstance = new Chart(genreChart, {
             type: "pie",
             data: {
               labels: labels,
-              datasets: [
-                {
-                  label: "Genre Match %",
-                  data: values,
-                  backgroundColor: [
-                    "#6366f1", "#3b82f6", "#06b6d4", "#10b981",
-                    "#84cc16", "#f59e0b", "#ef4444", "#8b5cf6",
-                    "#ec4899", "#0ea5e9"
-                  ],
-                  borderColor: "#1f2937",
-                  borderWidth: 2,
-                },
-              ],
+              datasets: [{
+                label: "Genre Match %",
+                data: values,
+                backgroundColor: colors,
+                borderColor: "#1f2937",
+                borderWidth: 2,
+              }]
             },
             options: {
               responsive: true,
               plugins: {
                 tooltip: {
                   callbacks: {
-                    label: function (context) {
-                      return `${context.label}: ${context.raw.toFixed(2)}%`;
-                    },
-                  },
-                },
-                legend: {
-                  position: "bottom",
-                  labels: {
-                    color: "white"
+                    label: ctx => `${ctx.label}: ${ctx.raw.toFixed(2)}%`
                   }
                 },
-              },
-            },
+                legend: { display: false }
+              }
+            }
           });
 
-          genreChart.classList.remove("hidden");
+          // Custom aligned label display
+          genreLabelsDiv.innerHTML = labels.map((label, i) =>
+            `<div class="genre-label-item" style="color:${colors[i]};">
+               <span class="genre-dot" style="background:${colors[i]};"></span>${label}
+             </div>`).join("");
+
+          resultBox.classList.remove("hidden");
         }
+
       } catch (err) {
         statusDiv.classList.add("hidden");
         errorDiv.textContent = "An error occurred. Please try again.";
@@ -130,6 +134,15 @@
       }
     });
   </script>
-</body>
+  
+  <nav class="navbar glassmorphism-effect w-full py-4 shadow-md fixed top-0 left-0 z-50">
+    <div class="text-center">
+      <h1 class="text-2xl font-orbitron text-indigo-300 tracking-widest">
+        ViboSonic <span class="font-sans text-indigo-100">: An audio genre classification system</span>
+      </h1>
+    </div>
+  </nav>
 
+  
+</body>
 </html>
