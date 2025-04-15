@@ -3,3 +3,7 @@ tensorflow
 librosa
 numpy
 matplotlib
+seaborn
+scikit-learn
+ffmpeg-python 
+audioread
