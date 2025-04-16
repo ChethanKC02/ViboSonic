@@ -1,5 +1,7 @@
+/* Fonts */
 body {
   font-family: 'Inter', sans-serif;
+  padding-top: 100px;
   background-size: 400% 400%;
   animation: gradientFlow 30s ease infinite;
 }
@@ -16,12 +18,11 @@ body {
 
 .file-label {
   font-family: 'Roboto', sans-serif;
-  font-size: 0.8rem;
-  display: flex;  /* Enable Flexbox */
-  justify-content: center;  /* Center horizontally */
-  align-items: center;  /* Center vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 50%;
-  height: 50px;  /* Increased height for better visibility */
+  height: 50px;
   padding: 1.5rem;
   border: 2px solid rgba(99, 102, 241, 0.7);
   border-radius: 5px;
@@ -42,22 +43,6 @@ body {
   color: #a5b4fc;
 }
 
-.upload-btn {
-  background-color: #3b82f6; /* Tailwind's blue-500 */
-  color: white;
-  padding: 0.6rem 1.8rem;
-  font-size: 1rem;
-  font-weight: 500;
-  border-radius: 5px;
-  border: 1px solid #3b82f6;
-  transition: background-color 0.2s ease, transform 0.2s ease;
-}
-
-.upload-btn:hover {
-  background-color: #2563eb; /* Slightly darker on hover */
-  transform: translateY(-1px);
-}
-
 .selected-file {
   color: #e0e7ff;
   font-size: 0.95rem;
@@ -75,61 +60,34 @@ body {
   100% { opacity: 1; }
 }
 
-.glassmorphism-effect {
-  backdrop-filter: blur(14px);
-  background-color: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-}
-
-.genre-label-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 500;
-  font-size: 0.95rem;
-}
-
-.genre-dot {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-}
-
-.quote-style {
-  font-size: 1.25rem;
-  font-family: 'Georgia', serif;
-  letter-spacing: 1px;
-}
-
-.navbar {
-  backdrop-filter: blur(15px);
-  background-color: rgba(255, 255, 255, 0.05);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-}
-
-.font-orbitron {
-  font-family: 'Orbitron', sans-serif;
-}
-
-body {
-  padding-top: 100px;
-}
-
-.main-glass-box {
-  backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.05);
-  padding: 2rem;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  border: 1px solid rgba(99, 102, 241, 0.6); /* Tailwind indigo-500 */
+.upload-btn {
+  background: linear-gradient(45deg, #6366f1, #3b82f6);
+  color: white;
+  padding: 0.6rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 400;
   border-radius: 5px;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.upload-btn:hover {
+  background: linear-gradient(45deg, #3b82f6, #6366f1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.upload-btn:active {
+  background: linear-gradient(45deg, #6366f1, #3b82f6);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(1px);
 }
 
 .download-btn {
   display: block;
-  margin: 1rem auto; /* centers the button horizontally */
+  margin: 1rem auto;
   background-color: #06b6d4;
   color: white;
   padding: 0.5rem 1.5rem;
@@ -146,43 +104,62 @@ body {
   transform: translateY(-1px);
 }
 
-.upload-btn {
-  background: linear-gradient(45deg, #6366f1, #3b82f6); /* Gradient effect */
-  color: white;
-  padding: 0.6rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 400; /* Light font */
-  border-radius: 5px; /* Small rounded corners */
-  border: none;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-.upload-btn:hover {
-  background: linear-gradient(45deg, #3b82f6, #6366f1); /* Reverse gradient */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Softer shadow on hover */
-  transform: translateY(-2px); /* Subtle lift effect */
-}
-
-.upload-btn:active {
-  background: linear-gradient(45deg, #6366f1, #3b82f6); /* Original gradient on press */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Reset shadow */
-  transform: translateY(1px); /* Subtle press effect */
-}
-
-.main-glass-box { 
+/* Main container */
+.main-glass-box {
   position: absolute;
-  top: 20%; /* Adjust this percentage to move it up or down */
+  top: 20%;
   left: 50%;
   transform: translateX(-50%);
   width: 70%;
   max-width: 900px;
-  transition: box-shadow 0.5s ease; /* Smooth transition */
+  padding: 2rem;
+  border-radius: 5px;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+  border: 1px solid rgba(99, 102, 241, 0.6);
+  transition: box-shadow 0.5s ease;
 }
 
-
 .main-glass-box:hover {
-  transform: translateX(-50%) scale(1.01); /* Subtle scaling */
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Slight shadow with smooth effect */
+  transform: translateX(-50%) scale(1.01);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Glass effect */
+.glassmorphism-effect {
+  backdrop-filter: blur(14px);
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Genre label */
+.genre-label-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.genre-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Misc */
+.quote-style {
+  font-size: 1.25rem;
+  font-family: 'Georgia', serif;
+  letter-spacing: 1px;
+}
+
+.navbar {
+  backdrop-filter: blur(15px);
+  background-color: rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }

@@ -23,6 +23,7 @@ form.addEventListener("submit", async (e) => {
   statusDiv.classList.remove("hidden");
   errorDiv.classList.add("hidden");
   resultBox.classList.add("hidden");
+  downloadBtn.classList.add("hidden");
 
   const formData = new FormData();
   formData.append("file", document.getElementById("audioFile").files[0]);
