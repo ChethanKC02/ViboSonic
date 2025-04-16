@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 from genre_predictor import predict_genre
 
 app = Flask(__name__)
-UPLOAD_FOLDER = "uploads"
+UPLOAD_FOLDER = ".uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
@@ -29,7 +29,7 @@ def predict():
 
         genre_probs = predict_genre(file_path)
         genre_probs = {k: round(float(v), 2) for k, v in genre_probs.items()}
-
+        os.remove(file_path)  # Clean up the uploaded file
         return jsonify(genre_probs)
 
     except Exception as e:

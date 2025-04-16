@@ -14,8 +14,105 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 
+<canvas id="linesCanvas" style="position: fixed; top: 0; left: 0; pointer-events: none; z-index: 0;"></canvas>
+<script>
+  const canvas = document.getElementById("linesCanvas");
+  const ctx = canvas.getContext("2d");
+  let w = canvas.width = window.innerWidth;
+  let h = canvas.height = window.innerHeight;
+
+  window.addEventListener('resize', () => {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  });
+
+  const lines = [];
+  const maxLines = 100;  // Increased the number of lines for denser effect
+  const lineLength = 150;  // Keeping the same connection threshold
+
+  class Line {
+    constructor(x, y) {
+      this.x = x;
+      this.y = y;
+      this.angle = Math.random() * 2 * Math.PI;
+      this.speed = Math.random() * 0.5 + 0.2;
+      this.size = Math.random() * 2 + 1;
+    }
+
+    update() {
+      this.x += Math.cos(this.angle) * this.speed;
+      this.y += Math.sin(this.angle) * this.speed;
+
+      if (this.x < 0 || this.x > w) this.angle = Math.random() * Math.PI;
+      if (this.y < 0 || this.y > h) this.angle = Math.random() * Math.PI;
+
+      // Adjust speed and direction when near mouse
+      if (mouseX && mouseY) {
+        const dist = Math.sqrt((this.x - mouseX) ** 2 + (this.y - mouseY) ** 2);
+        if (dist < 100) {
+          this.angle = Math.atan2(mouseY - this.y, mouseX - this.x);
+          this.speed = 1.5;
+        }
+      }
+    }
+
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+      ctx.fill();
+    }
+
+    connectTo(otherLine) {
+      const dist = Math.sqrt((this.x - otherLine.x) ** 2 + (this.y - otherLine.y) ** 2);
+      if (dist < lineLength) {
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(otherLine.x, otherLine.y);
+        ctx.strokeStyle = `rgba(255, 255, 255, ${1 - dist / lineLength})`;  // More visible lines
+        ctx.lineWidth = 0.8;  // Thicker lines for better connection
+        ctx.stroke();
+      }
+    }
+  }
+
+  let mouseX, mouseY;
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  function createLines() {
+    for (let i = 0; i < maxLines; i++) {
+      lines.push(new Line(Math.random() * w, Math.random() * h));
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, w, h);
+    lines.forEach(line => {
+      line.update();
+      line.draw();
+    });
+
+    // Connect lines together based on distance
+    for (let i = 0; i < lines.length; i++) {
+      for (let j = i + 1; j < lines.length; j++) {
+        lines[i].connectTo(lines[j]);
+      }
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  createLines();
+  animate();
+</script>
+
 <body class="bg-gradient-to-tr from-gray-900 via-black to-gray-900 text-white min-h-screen flex items-center justify-center">
-  <div class="main-glass-box w-full max-w-2xl p-8 glassmorphism-effect rounded-3xl shadow-2xl">
+  <!-- <div class="main-glass-box w-full max-w-2xl p-8 glassmorphism-effect rounded-3xl shadow-2xl"> -->
+  <div class="main-glass-box w-full max-w-2xl p-8 glassmorphism-effect rounded-[10px] shadow-2xl">
+
     <p class="text-center text-lg font-semibold text-indigo-300 italic mb-6 quote-style">
        | Feel the music. Classify the magic |
     </p>
@@ -45,7 +142,7 @@
   <nav class="navbar glassmorphism-effect w-full py-4 shadow-md fixed top-0 left-0 z-50">
     <div class="text-center">
       <h1 class="text-2xl font-orbitron text-indigo-300 tracking-widest">
-        ViboSonic <span class="font-sans text-indigo-100">: An audio genre classification system</span>
+        ViboSonic <span class="font-sans text-indigo-100">: Audio Genre Classification System</span>
       </h1>
     </div>
   </nav>

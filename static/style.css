@@ -15,11 +15,16 @@ body {
 }
 
 .file-label {
-  display: block;
-  width: 100%;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.8rem;
+  display: flex;  /* Enable Flexbox */
+  justify-content: center;  /* Center horizontally */
+  align-items: center;  /* Center vertically */
+  width: 50%;
+  height: 50px;  /* Increased height for better visibility */
   padding: 1.5rem;
-  border: 2px dashed #6366f1;
-  border-radius: 1rem;
+  border: 2px solid rgba(99, 102, 241, 0.7);
+  border-radius: 5px;
   background-color: rgba(255, 255, 255, 0.05);
   text-align: center;
   cursor: pointer;
@@ -43,7 +48,7 @@ body {
   padding: 0.6rem 1.8rem;
   font-size: 1rem;
   font-weight: 500;
-  border-radius: 8px;
+  border-radius: 5px;
   border: 1px solid #3b82f6;
   transition: background-color 0.2s ease, transform 0.2s ease;
 }
@@ -116,10 +121,10 @@ body {
 .main-glass-box {
   backdrop-filter: blur(10px);
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
   padding: 2rem;
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
   border: 1px solid rgba(99, 102, 241, 0.6); /* Tailwind indigo-500 */
+  border-radius: 5px;
 }
 
 .download-btn {
@@ -130,7 +135,7 @@ body {
   padding: 0.5rem 1.5rem;
   font-size: 0.95rem;
   font-weight: 500;
-  border-radius: 8px;
+  border-radius: 5px;
   border: 1px solid #0891b2;
   transition: background-color 0.2s ease, transform 0.2s ease;
   text-align: center;
@@ -139,4 +144,45 @@ body {
 .download-btn:hover {
   background-color: #0e7490;
   transform: translateY(-1px);
+}
+
+.upload-btn {
+  background: linear-gradient(45deg, #6366f1, #3b82f6); /* Gradient effect */
+  color: white;
+  padding: 0.6rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 400; /* Light font */
+  border-radius: 5px; /* Small rounded corners */
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.upload-btn:hover {
+  background: linear-gradient(45deg, #3b82f6, #6366f1); /* Reverse gradient */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Softer shadow on hover */
+  transform: translateY(-2px); /* Subtle lift effect */
+}
+
+.upload-btn:active {
+  background: linear-gradient(45deg, #6366f1, #3b82f6); /* Original gradient on press */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Reset shadow */
+  transform: translateY(1px); /* Subtle press effect */
+}
+
+.main-glass-box { 
+  position: absolute;
+  top: 20%; /* Adjust this percentage to move it up or down */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  max-width: 900px;
+  transition: box-shadow 0.5s ease; /* Smooth transition */
+}
+
+
+.main-glass-box:hover {
+  transform: translateX(-50%) scale(1.01); /* Subtle scaling */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Slight shadow with smooth effect */
 }
