@@ -11,8 +11,8 @@ from sklearn.model_selection import train_test_split
 import json
 
 # Define your folder structure
-# data_dir = './Data/genres_original'
-data_dir = './Data/genres_original_small'
+# data_dir = '.\Data\genres_original'
+data_dir = '.\Data\Extended\genres_original'
 classes = ['blues', 'classical','country','disco','hiphop','jazz','metal','pop','reggae','rock']
 
 # Load and preprocess audio data
@@ -21,12 +21,16 @@ def load_and_preprocess_data(data_dir, classes, target_shape=(150, 150)):
     labels = []
     
     for i_class, class_name in enumerate(classes):
-        class_dir = os.path.join(data_dir, class_name)
+        class_dir = os.path.join(data_dir, class_name)  
         print("Processing--", class_name)
         for filename in os.listdir(class_dir):
             if filename.endswith('.wav'):
                 file_path = os.path.join(class_dir, filename)
-                audio_data, sample_rate = librosa.load(file_path, sr=None)
+                try:
+                    audio_data, sample_rate = librosa.load(file_path, sr=None)
+                except Exception as e:
+                    print(f"Skipping {file_path} due to error: {e}")
+                    continue
                 chunk_duration = 4  # seconds
                 overlap_duration = 2  # seconds
                 chunk_samples = chunk_duration * sample_rate
@@ -77,11 +81,7 @@ model.add(Dropout(0.3))
 
 model.add(Flatten())
 
-# model.add(Reshape((timesteps, features)))
-# model.add(GRU(units))
-
-
-# RNN Layer (LSTM or GRU)
+# RNN Layer (LSTM)
 model.add(tf.keras.layers.Reshape((1, -1)))  # Reshape for RNN input
 model.add(LSTM(128, activation='relu', return_sequences=False))  # LSTM layer for sequence learning
 model.add(Dropout(0.4))
@@ -98,6 +98,6 @@ training_history = model.fit(X_train, y_train, epochs=30, batch_size=32, validat
 
 # Save model and training history
 # model.save("Trained_model.keras")
-model.save("Trained_model.h5")
+model.save("Trained_model_extended.h5")
 with open('training_hist.json', 'w') as f:
     json.dump(training_history.history, f)

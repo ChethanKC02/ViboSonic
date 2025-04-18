@@ -5,7 +5,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.image import resize
 
-model = tf.keras.models.load_model("Trained_model.h5")
+model = tf.keras.models.load_model(".\Trained_model.h5")
 classes = ['blues', 'classical','country','disco','hiphop','jazz','metal','pop','reggae','rock']
 
 def load_and_preprocess_data(file_path, target_shape=(150, 150)):
