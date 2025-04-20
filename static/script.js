@@ -9,24 +9,42 @@ const downloadBtn = document.getElementById("downloadBtn");
 let chartInstance = null;
 
 document.getElementById("audioFile").addEventListener("change", function () {
+  // Reset all UI elements as soon as a new file is selected
+  if (chartInstance) {
+    chartInstance.destroy(); // Destroy the previous chart if it exists
+  }
+  statusDiv.classList.add("hidden");
+  errorDiv.classList.add("hidden");
+  resultBox.classList.add("hidden");
+  downloadBtn.classList.add("hidden");
+  errorDiv.textContent = ''; // Clear previous error message
+  selectedFile.classList.add("hidden");
+
   const file = this.files[0];
   if (file) {
     selectedFile.textContent = ` 🎵 Selected File : ${file.name} 🎵`;
     selectedFile.classList.remove("hidden");
-  } else {
-    selectedFile.classList.add("hidden");
   }
 });
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
+  
+  const file = document.getElementById("audioFile").files[0]; // Get the selected file
+
+  // Reset previous results and error messages when a new prediction is triggered
+  if (chartInstance) {
+    chartInstance.destroy(); // Destroy previous chart if it exists
+  }
+  
   statusDiv.classList.remove("hidden");
   errorDiv.classList.add("hidden");
   resultBox.classList.add("hidden");
   downloadBtn.classList.add("hidden");
+  errorDiv.textContent = '';  // Clear previous error message
 
   const formData = new FormData();
-  formData.append("file", document.getElementById("audioFile").files[0]);
+  formData.append("file", file);
 
   try {
     const response = await fetch("/predict", {
@@ -48,8 +66,6 @@ form.addEventListener("submit", async (e) => {
         "#84cc16", "#f59e0b", "#ef4444", "#8b5cf6",
         "#ec4899", "#0ea5e9"
       ];
-
-      if (chartInstance) chartInstance.destroy();
 
       chartInstance = new Chart(genreChart, {
         type: "pie",

@@ -27,7 +27,7 @@
   });
 
   const lines = [];
-  const maxLines = 100;  // Increased the number of lines for denser effect
+  const maxLines = 60;  // Increased the number of lines for denser effect
   const lineLength = 150;  // Keeping the same connection threshold
 
   class Line {
@@ -36,25 +36,29 @@
       this.y = y;
       this.angle = Math.random() * 2 * Math.PI;
       this.speed = Math.random() * 0.5 + 0.2;
-      this.size = Math.random() * 2 + 1;
+      this.size = Math.random() * 1.5 + 1;
     }
 
     update() {
-      this.x += Math.cos(this.angle) * this.speed;
-      this.y += Math.sin(this.angle) * this.speed;
+    this.x += Math.cos(this.angle) * this.speed;
+    this.y += Math.sin(this.angle) * this.speed;
 
-      if (this.x < 0 || this.x > w) this.angle = Math.random() * Math.PI;
-      if (this.y < 0 || this.y > h) this.angle = Math.random() * Math.PI;
+    if (this.x < 0 || this.x > w || this.y < 0 || this.y > h) {
+      // Reset to random position inside canvas
+      this.x = Math.random() * w;
+      this.y = Math.random() * h;
+      this.angle = Math.random() * 2 * Math.PI;
+      this.speed = Math.random() * 0.5 + 0.2;
+    }
 
-      // Adjust speed and direction when near mouse
-      if (mouseX && mouseY) {
-        const dist = Math.sqrt((this.x - mouseX) ** 2 + (this.y - mouseY) ** 2);
-        if (dist < 100) {
-          this.angle = Math.atan2(mouseY - this.y, mouseX - this.x);
-          this.speed = 1.5;
-        }
+    if (mouseX && mouseY) {
+      const dist = Math.sqrt((this.x - mouseX) ** 2 + (this.y - mouseY) ** 2);
+      if (dist < 100) {
+        this.angle = Math.atan2(mouseY - this.y, mouseX - this.x);
+        this.speed = 1.5;
       }
     }
+  }
 
     draw() {
       ctx.beginPath();
@@ -127,8 +131,9 @@
       <button type="submit" class="upload-btn">Predict Genre</button>
     </form>
 
-    <div id="status" class="text-indigo-300 mt-6 hidden text-center">Analyzing audio... 🎶</div>
-    <div id="error" class="text-red-400 mt-2 hidden text-center"></div>
+    <div id="status" class="text-indigo-300 mt-6 hidden text-center">Analyzing audio... </div>
+    <div id="error" class="hidden"></div>
+    
 
     <div id="resultBox" class="mt-10 p-6 rounded-xl glassmorphism-effect hidden">
       <p class="text-xl font-semibold text-center mb-4">Genre Prediction Results</p>
